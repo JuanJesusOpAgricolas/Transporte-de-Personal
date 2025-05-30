@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirigiendo...</title>
+  <script>
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const bus = params.get("bus");
+
+      if (bus) {
+        // Enviar el valor 'bus' a Power Automate mediante una solicitud HTTP POST
+        fetch('https://prod-XX.westus.logic.azure.com:443/workflows/XXXXXXXXXXXXXX/triggers/manual/paths/invoke', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ bus: bus })
+        })
+        .then(response => {
+          // Redirigir al formulario de Microsoft Forms
+          const formUrl = "https://forms.office.com/Pages/ResponsePage.aspx?id=XYZ123";
+          window.location.href = formUrl;
+        })
+        .catch(error => {
+          document.body.innerHTML = "<h2>Error al enviar el parámetro 'bus'.</h2>";
+        });
+      } else {
+        document.body.innerHTML = "<h2>Parámetro 'bus' no encontrado en la URL.</h2>";
+      }
+    };
+  </script>
+</head>
+<body>
+  <p>Redirigiendo al formulario...</p>
+</body>
+</html>
